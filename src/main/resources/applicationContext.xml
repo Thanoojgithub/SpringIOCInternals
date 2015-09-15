@@ -1,0 +1,72 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.springiocinternals" />
+
+	<bean id="dept" class="com.springiocinternals.Dept">
+		<constructor-arg name="dId" value="10"></constructor-arg>
+		<constructor-arg name="location" value="Bangalore-hTC"></constructor-arg>
+	</bean>
+
+	<bean id="deptTwo" class="com.springiocinternals.Dept">
+		<constructor-arg name="dId" value="20"></constructor-arg>
+		<constructor-arg name="location" value="Bangalore-BPO"></constructor-arg>
+	</bean>
+	
+	<bean id="addr" class="com.springiocinternals.Address">
+		<constructor-arg name="dNo" value="35" />
+		<constructor-arg name="street" value="7th cross, 1st Stage, BTM layout" />
+		<constructor-arg name="city" value="Bangalore" />
+		<constructor-arg name="pincode" value="560029" />
+	</bean>
+
+	<bean id="addrTwo" class="com.springiocinternals.Address" primary="true">
+		<constructor-arg name="dNo" value="19" />
+		<constructor-arg name="street" value="First Line, Bairagepatteda" />
+		<constructor-arg name="city" value="Tirupati" />
+		<constructor-arg name="pincode" value="517501" />
+	</bean>
+	
+	<bean id="person" abstract="true" class="com.springiocinternals.Person" />
+
+	<bean id="employee" class="com.springiocinternals.Employee" parent="person" >
+		<constructor-arg name="name" value="sriram" />
+		<constructor-arg name="sSNo" value="101" />
+		<constructor-arg name="addr" ref="addr" />
+		<constructor-arg name="eId" value="123" />
+		<constructor-arg name="dept" ref="dept" />
+	</bean>
+
+	<bean id="prototypeScope" class="com.springiocinternals.PrototypeScope" scope="prototype">
+		<property name="pSid" value="pSid_123"/>
+	</bean>
+	<bean id="singletonScope" class="com.springiocinternals.SingletonScope">
+		<property name="sSId" value="123"/>
+		<lookup-method name="getPrototypeScope" bean="prototypeScope" />
+	</bean>
+	
+	<!--if, scope="prototype" 
+	FactoryMethodBean [fmbName=sriram, hashCode()=1400578246] 
+	FactoryMethodBean [fmbName=sriram, hashCode()=1934886086] -->
+	<bean id="factoryMethodBean" class="com.springiocinternals.FactoryMethodBean" factory-method="getInstanceFmb" >
+		<constructor-arg name="fmbName" value="sriram" />
+		<constructor-arg name="addr" ref="addr" />
+	</bean>
+	
+	<bean id="factoryBeanIns" class="com.springiocinternals.FactoryBean"></bean>
+	<bean id="factoryBean" factory-bean="factoryBeanIns" factory-method="getShape">
+		<constructor-arg name="shapeType" value="CIRCLE" />
+	</bean>
+	<!-- lazy-init="true", to avoid eager initialization, i.e., calling init()-->
+	<bean id="initDestroyBean" class="com.springiocinternals.InitDestroyBean" init-method="init" destroy-method="destroy" lazy-init="true">
+		<property name="name" value="sriram"></property>
+	</bean>
+</beans>

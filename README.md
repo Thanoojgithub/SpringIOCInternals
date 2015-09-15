@@ -13,3 +13,6 @@ concepts covered ::
     init-method
     destroy-method
     lazy-init
+    abstract
+    parent
+    primary

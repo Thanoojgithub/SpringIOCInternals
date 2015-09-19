@@ -1,0 +1,17 @@
+
+
+Circular dependency in spring loc ?
+bean1 -> bean2 -> bean1
+
+Spring loc detects configuration problems, such as references to non-existent beans and circular dependencies, at container load-time. Spring sets properties and resolves dependencies as late as possible, when the bean is actually created.
+So it instantiates both beans and injects them onto each other.
+
+'BeanCurrentlyInCreationException' mostly acorss due to constructor injection. If that is the case mostly using setter injection instead of constructor injection will solve the issue. Constructor injection typically gives rise to the chicken-egg problem!
+
+Work around by using setter injection. However, generally this is a bad idea since the code will be harder to maintain and test. I suggest that you refactor your code to only have unidirectional dependencies, e.g.
+
+BeanA -> BeanB
+Another way of solving this is to pull out the common behavior in a third bean class, and then let the two initial classes depend on it, e.g.
+
+BeanA -> BeanC
+BeanB -> BeanC

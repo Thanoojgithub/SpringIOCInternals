@@ -1,7 +1,7 @@
 
 
 Circular dependency in spring loc ?
-bean1 -> bean2 -> bean1
+beanA -> beanB -> beanA
 
 Spring loc detects configuration problems, such as references to non-existent beans and circular dependencies, at container load-time. Spring sets properties and resolves dependencies as late as possible, when the bean is actually created.
 So it instantiates both beans and injects them onto each other.
